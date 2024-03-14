@@ -133,7 +133,7 @@ getDbCohortBasedCovariatesData <- function(connection,
     cohortId = cohortId,
     cdmVersion = cdmVersion,
     rowIdField = rowIdField,
-    detailledSettings,
+    covariateSettings = detailledSettings,
     aggregated = aggregated
   )
   
