@@ -14,6 +14,7 @@ getDbCovariateData(
   cohortDatabaseSchema = cdmDatabaseSchema,
   cohortTableIsTemp = FALSE,
   cohortId = -1,
+  cohortIds = c(-1),
   rowIdField = "subject_id",
   covariateSettings,
   aggregated = FALSE
@@ -34,7 +35,7 @@ should be specified.}
 
 \item{cdmDatabaseSchema}{The name of the database schema that contains the OMOP CDM instance.
 Requires read permissions to this database. On SQL Server, this should
-specifiy both the database and the schema, so for example
+specify both the database and the schema, so for example
 'cdm_instance.dbo'.}
 
 \item{cdmVersion}{Define the OMOP CDM version used: currently supported is "5".}
@@ -44,12 +45,16 @@ construct covariates}
 
 \item{cohortDatabaseSchema}{If the cohort table is not a temp table, specify the database schema
 where the cohort table can be found. On SQL Server, this should
-specifiy both the database and the schema, so for example
+specify both the database and the schema, so for example
 'cdm_instance.dbo'.}
 
 \item{cohortTableIsTemp}{Is the cohort table a temp table?}
 
-\item{cohortId}{For which cohort ID(s) should covariates be constructed? If set to -1,
+\item{cohortId}{DEPRECATED:For which cohort ID(s) should covariates be constructed? If set to -1,
+covariates will be constructed for all cohorts in the specified cohort
+table.}
+
+\item{cohortIds}{For which cohort ID(s) should covariates be constructed? If set to c(-1),
 covariates will be constructed for all cohorts in the specified cohort
 table.}
 
@@ -74,4 +79,30 @@ This function uses the data in the CDM to construct a large set of covariates fo
 cohort. The cohort is assumed to be in an existing table with these fields: 'subject_id',
 'cohort_definition_id', 'cohort_start_date'. Optionally, an extra field can be added containing the
 unique identifier that will be used as rowID in the output.
+}
+\examples{
+\dontrun{
+eunomiaConnectionDetails <- Eunomia::getEunomiaConnectionDetails()
+covSettings <- createDefaultCovariateSettings()
+Eunomia::createCohorts(
+  connectionDetails = eunomiaConnectionDetails,
+  cdmDatabaseSchema = "main",
+  cohortDatabaseSchema = "main",
+  cohortTable = "cohort"
+)
+covData <- getDbCovariateData(
+  connectionDetails = eunomiaConnectionDetails,
+  oracleTempSchema = NULL,
+  cdmDatabaseSchema = "main",
+  cdmVersion = "5",
+  cohortTable = "cohort",
+  cohortDatabaseSchema = "main",
+  cohortTableIsTemp = FALSE,
+  cohortIds = -1,
+  rowIdField = "subject_id",
+  covariateSettings = covSettings,
+  aggregated = FALSE
+)
+}
+
 }
