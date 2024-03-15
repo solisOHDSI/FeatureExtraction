@@ -105,3 +105,4 @@ SELECT @analysis_id AS analysis_id,
 }
 	CAST('Y' AS VARCHAR(1)) AS is_binary,
 	CAST(NULL AS VARCHAR(1)) AS missing_means_zero;
+
